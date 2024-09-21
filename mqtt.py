@@ -44,11 +44,21 @@ def setup_mqtt_client(mqtt_ip, mqtt_port):
     return mqtt_client
 
 
+def compose_mqtt_message():
+    """
+
+    """
+
+    message = 0
+
+    return message
+
+
 def send_mqtt_message(mqtt_client, feed, message):
     """
     Publish MQTT message to the specified feed.
     """
     
     print("Sending message to MQTT broker...")
-    mqtt_client.publish(feed, message)
+    mqtt_client.publish(feed, message, qos = 1)
     print("Message sent!")
