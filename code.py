@@ -2,7 +2,7 @@ import time
 
 import config
 from connect_wifi import connect_wifi
-from mqtt import setup_mqtt_client, send_mqtt_message
+from mqtt import setup_mqtt_client, send_mqtt_message, format_mqtt_payload
 from sensors import initialize_sensors, print_sensor_data, read_sensor_data
 
 
@@ -22,13 +22,13 @@ sensor_air, sensor_light = initialize_sensors(config.POWER_UP_PIN, config.SCL_PI
 
 while True:
     # read sensor data
-    light_intensity, temperature, humidity, air_pressure = read_sensor_data(sensor_light, sensor_air)
+    measurements = read_sensor_data(sensor_light, sensor_air)
     
     # print sensor data for debug
-    print_sensor_data(light_intensity, temperature, humidity, air_pressure)
+    print_sensor_data(measurements)
 
     # compose MQTT message
-    message = light_intensity + "|" + temperature + "|" + humidity + "|" + air_pressure
+    message = format_mqtt_payload(measurements)
 
     # send message to broker
     send_mqtt_message(mqtt_client, config.MQTT_FEED, message)

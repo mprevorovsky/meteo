@@ -37,15 +37,15 @@ def initialize_sensors(power_up_pin, scl_pin, sda_pin):
 
 
 
-def print_sensor_data(light_intensity, temperature, humidity, air_pressure):
+def print_sensor_data(measurements):
       """
       Print light intensity, temperature, humidity and air_pressure.
       """
       
-      print("Light:", light_intensity, "lux |",
-          "Temperature:", temperature, "°C |",
-          "Rel. humidity", humidity, "% |",
-          "Pressure:", air_pressure, "hPa")
+      print("Light:", measurements["light_intensity"], "lux |",
+          "Temperature:", measurements["temperature"], "°C |",
+          "Rel. humidity", measurements["humidity"], "% |",
+          "Pressure:", measurements["air_pressure"], "hPa")
 
 
 def read_sensor_data(sensor_light, sensor_air):
@@ -53,10 +53,10 @@ def read_sensor_data(sensor_light, sensor_air):
     Read light intensity, temperature, humidity and air pressure data from sensors.
     """
     
-    light_intensity = str(round(sensor_light.lux, 1))
-    temperature = str(round(sensor_air.temperature, 1))
-    humidity = str(round(sensor_air.relative_humidity, 1))
-    air_pressure = str(round(sensor_air.pressure, 1))
-
-    return light_intensity, temperature, humidity, air_pressure
+    return {
+          "light_intensity": str(round(sensor_light.lux, 1)),
+          "temperature": str(round(sensor_air.temperature, 1)),
+          "humidity": str(round(sensor_air.relative_humidity, 1)),
+          "air_pressure": str(round(sensor_air.pressure, 1))
+    }
 

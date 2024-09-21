@@ -1,6 +1,7 @@
 import wifi
 import socketpool
 import ssl
+import json
 import adafruit_minimqtt.adafruit_minimqtt as MQTT
 
 
@@ -44,14 +45,12 @@ def setup_mqtt_client(mqtt_ip, mqtt_port):
     return mqtt_client
 
 
-def compose_mqtt_message():
+def format_mqtt_payload(payload):
+    """
+    Turn a dictionary object into JSON-formatted MQTT payload.
     """
 
-    """
-
-    message = 0
-
-    return message
+    return json.dumps(payload)
 
 
 def send_mqtt_message(mqtt_client, feed, message):
