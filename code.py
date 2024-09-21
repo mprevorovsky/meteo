@@ -1,42 +1,38 @@
-import os
-import wifi
 import time
 
-import mqtt
+import config
+from connect_wifi import connect_wifi
+from mqtt import setup_mqtt_client, send_mqtt_message
+from sensors import initialize_sensors, print_sensor_data, read_sensor_data
 
 
-WIFI_SSID = os.getenv('CIRCUITPY_WIFI_SSID')
-WIFI_PASSWORD = os.getenv("CIRCUITPY_WIFI_PASSWORD")
-
-MQTT_IP = "192.168.1.112"
-MQTT_PORT = 1883
-
-
-def connect_wifi():
-    print(f"Connecting to {WIFI_SSID}")
-    wifi.radio.connect(WIFI_SSID, WIFI_PASSWORD)
-    print(f"Connected to {WIFI_SSID}!")
-
-
-# MAIN
 # Connect to WiFi network
-connect_wifi()
+connect_wifi(config.WIFI_SSID, config.WIFI_PASSWORD)
+
 # Set up MQTT client
-mqtt_client = mqtt.setup_mqtt_client(MQTT_IP, MQTT_PORT)
-# Connect the client to the MQTT broker.
+mqtt_client = setup_mqtt_client(config.MQTT_IP, config.MQTT_PORT)
+
+# Connect the client to the MQTT broker
 print("Connecting to MQTT broker...")
 mqtt_client.connect()
 
-# Setup a feed for publishing
-meteo_feed = "greenhouse/temperature"
+# Initialize I2C BUS and sensors
+sensor_air, sensor_light = initialize_sensors(config.POWER_UP_PIN, config.SCL_PIN, config.SDA_PIN)
 
-
-temperature_val = 0
 
 while True:
-    # Send message
-    print(f"Sending sensor values: {temperature_val}...")
-    mqtt_client.publish(meteo_feed, temperature_val)
-    print("Sent!")
-    temperature_val += 1
-    time.sleep(5)
+    # read sensor data
+    light_intensity, temperature, humidity, air_pressure = read_sensor_data(sensor_light, sensor_air)
+    
+    # print sensor data for debug
+    print_sensor_data(light_intensity, temperature, humidity, air_pressure)
+
+    # compose MQTT message
+    message = light_intensity + "|" + temperature + "|" + humidity + "|" + air_pressure
+
+    # send message to broker
+    send_mqtt_message(mqtt_client, config.MQTT_FEED, message)
+
+    # sleep 
+    # TODO: go to deep sleep
+    time.sleep(config.MEASUREMENT_INTERVAL)

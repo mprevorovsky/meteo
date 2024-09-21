@@ -4,20 +4,27 @@ import ssl
 import adafruit_minimqtt.adafruit_minimqtt as MQTT
 
 
-# Define callback methods which are called when events occur
-def mqtt_broker_connected(client, userdata, flags, rc):
-    # This function will be called when the client is connected
-    # successfully to the broker.
+def _mqtt_broker_connected(client, userdata, flags, rc):
+    """
+    Called when the client is connected successfully to the broker. 
+    """
+
     print(f"Connected to MQTT broker!")
 
 
-def mqtt_broker_disconnected(client, userdata, rc):
-    # This method is called when the client is disconnected
+def _mqtt_broker_disconnected(client, userdata, rc):
+    """
+    Called when the client is disconnected from MQTT broker.
+    """
+
     print("Disconnected from MQTT broker!")
 
 
-# Define creation and setup of MQTT client
 def setup_mqtt_client(mqtt_ip, mqtt_port):
+    """
+    Create and set up an MQTT client
+    """
+    
     # Create a socket pool
     pool = socketpool.SocketPool(wifi.radio)
     ssl_context = ssl.create_default_context()
@@ -31,6 +38,17 @@ def setup_mqtt_client(mqtt_ip, mqtt_port):
         )
     
     # Setup the callback methods
-    mqtt_client.on_connect = mqtt_broker_connected
-    mqtt_client.on_disconnect = mqtt_broker_disconnected
+    mqtt_client.on_connect = _mqtt_broker_connected
+    mqtt_client.on_disconnect = _mqtt_broker_disconnected
+
     return mqtt_client
+
+
+def send_mqtt_message(mqtt_client, feed, message):
+    """
+    Publish MQTT message to the specified feed.
+    """
+    
+    print("Sending message to MQTT broker...")
+    mqtt_client.publish(feed, message)
+    print("Message sent!")

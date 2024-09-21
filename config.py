@@ -1,0 +1,16 @@
+import os
+import board
+
+
+WIFI_SSID = os.getenv('CIRCUITPY_WIFI_SSID')
+WIFI_PASSWORD = os.getenv("CIRCUITPY_WIFI_PASSWORD")
+
+MQTT_IP = "192.168.1.112"
+MQTT_PORT = 1883
+MQTT_FEED = "greenhouse/meteo"
+
+POWER_UP_PIN = board.IO3
+SCL_PIN = board.IO18
+SDA_PIN = board.IO19
+
+MEASUREMENT_INTERVAL = 5
