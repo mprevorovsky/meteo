@@ -17,12 +17,12 @@ print("Connecting to MQTT broker...")
 mqtt_client.connect()
 
 # Initialize I2C BUS and sensors
-sensor_air, sensor_light = initialize_sensors(config.POWER_UP_PIN, config.SCL_PIN, config.SDA_PIN)
+sensor_light_BH1750, sensor_light_VEML770, sensor_air = initialize_sensors(config.POWER_UP_PIN, config.SCL_PIN, config.SDA_PIN)
 
 
 while True:
     # read sensor data
-    measurements = read_sensor_data(sensor_light, sensor_air)
+    measurements = read_sensor_data(sensor_light_BH1750, sensor_light_VEML770, sensor_air)
     
     # print sensor data for debug
     print_sensor_data(measurements)
