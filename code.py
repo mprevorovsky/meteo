@@ -18,7 +18,7 @@ print("Connecting to MQTT broker...")
 mqtt_client.connect()
 
 # Initialize I2C BUS and sensors
-sensor_light_BH1750, sensor_light_VEML770, sensor_air = initialize_sensors(config.POWER_UP_PIN, config.SCL_PIN, config.SDA_PIN)
+sensor_light_VEML770, sensor_air = initialize_sensors(config.POWER_UP_PIN, config.SCL_PIN, config.SDA_PIN)
 
 # Initialize VBAT pin for reading battery voltage
 battery_voltage_reader = initialize_battery_voltage_reader(config.VBAT_PIN)
@@ -26,7 +26,7 @@ battery_voltage_reader = initialize_battery_voltage_reader(config.VBAT_PIN)
 
 while True:
     # read sensor data and battery voltage
-    sensor_measurements = read_sensor_data(sensor_light_BH1750, sensor_light_VEML770, sensor_air)
+    sensor_measurements = read_sensor_data(sensor_light_VEML770, sensor_air)
     battery_voltage_data = read_battery_voltage(battery_voltage_reader)
     
     # print sensor and voltage data for debug

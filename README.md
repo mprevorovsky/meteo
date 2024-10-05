@@ -7,7 +7,6 @@ LaskaKit Meteo Mini board with ESP32-C3 and external wifi antenna
 
 ## Sensors
 - [BME280](https://www.laskakit.cz/arduino-senzor-tlaku--teploty-a-vlhkosti-bme280/) - temperature, humidity, air pressure, I2C
-- [TSL2561](https://www.laskakit.cz/laskakit-tsl2561-snimac-intenzity-osvetleni/) - light intensity up to 30K lux, I2C
 - [VEML7700](https://botland.cz/svetelne-a-barevne-senzory/23550-veml7700-senzor-intenzity-svetla-i2c-stemma-qt-qwiic-adafruit-4162.html) - light intensity up to 120K lux, I2C
 
 ## Power

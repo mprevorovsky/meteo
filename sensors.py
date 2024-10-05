@@ -1,6 +1,5 @@
 import busio
 import time
-import adafruit_bh1750
 from adafruit_bme280 import basic
 import adafruit_veml7700
 from digitalio import DigitalInOut, Direction
@@ -21,7 +20,7 @@ def _power_up_connector(power_up_pin):
 
 def initialize_sensors(power_up_pin, scl_pin, sda_pin):
       """
-      Initialize sensor objects for BME280, BH1750 and VEML7700.
+      Initialize sensor objects for BME280 and VEML7700.
       """
 
       # power up the sensors
@@ -31,11 +30,10 @@ def initialize_sensors(power_up_pin, scl_pin, sda_pin):
       i2c = busio.I2C(scl_pin, sda_pin)
 
       # create sensor objects
-      sensor_light_BH1750 = adafruit_bh1750.BH1750(i2c)
-      sensor_light_VEML770 = adafruit_veml7700.VEML7700(i2c)
+      sensor_light = adafruit_veml7700.VEML7700(i2c)
       sensor_air = basic.Adafruit_BME280_I2C(i2c)
 
-      return sensor_light_BH1750, sensor_light_VEML770, sensor_air
+      return sensor_light, sensor_air
 
 
 
@@ -44,20 +42,18 @@ def print_sensor_data(measurements):
       Print light intensity, temperature, humidity and air_pressure.
       """
       
-      print("Light_BH1750:", measurements["light_intensity_BH1750"], "lux |",
-            "Light_VEML770:", measurements["light_intensity_VEML7700"], "lux |",
+      print("Light_VEML770:", measurements["light_intensity_VEML7700"], "lux |",
             "Temperature:", measurements["temperature"], "°C |",
             "Rel. humidity", measurements["humidity"], "% |",
             "Pressure:", measurements["air_pressure"], "hPa")
 
 
-def read_sensor_data(sensor_light_BH1750, sensor_light_VEML770, sensor_air):
+def read_sensor_data(sensor_light_VEML770, sensor_air):
     """
     Read light intensity, temperature, humidity and air pressure data from sensors.
     """
     
     return {
-          "light_intensity_BH1750": str(round(sensor_light_BH1750.lux, 1)),
           "light_intensity_VEML7700": str(round(sensor_light_VEML770.lux, 1)),
           "temperature": str(round(sensor_air.temperature, 1)),
           "humidity": str(round(sensor_air.relative_humidity, 1)),
